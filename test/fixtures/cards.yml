@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  name: MyString
+  number: MyString
+  verification_number: MyString
+  due_date: 2017-10-29 02:11:26
+  customer_id: 1
+
+two:
+  type: 
+  name: MyString
+  number: MyString
+  verification_number: MyString
+  due_date: 2017-10-29 02:11:26
+  customer_id: 1
