@@ -1,4 +1,4 @@
-class Comment < ApplicationRecord
+class ProductComment < ApplicationRecord
   belongs_to :products
   belongs_to :customers
 
