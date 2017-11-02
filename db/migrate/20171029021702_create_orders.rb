@@ -5,7 +5,6 @@ class CreateOrders < ActiveRecord::Migration[5.1]
       t.decimal :pst
       t.decimal :gst
       t.decimal :hst
-      t.integer :customer_id
 
       t.timestamps
     end

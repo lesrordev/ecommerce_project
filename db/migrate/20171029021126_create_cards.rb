@@ -6,7 +6,6 @@ class CreateCards < ActiveRecord::Migration[5.1]
       t.string :number
       t.string :verification_number
       t.datetime :due_date
-      t.integer :customer_id
 
       t.timestamps
     end

@@ -1,6 +1,6 @@
 class ProductComment < ApplicationRecord
-  belongs_to :products
-  belongs_to :customers
+  belongs_to :product
+  belongs_to :customer
 
   validates :content, :customer_id, :product_id, presence: true
 end

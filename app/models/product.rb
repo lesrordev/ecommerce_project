@@ -4,5 +4,5 @@ class Product < ApplicationRecord
   has_many :orders, :through => :order_items
 
   validates :name, :price, :stock_quantity, presence: true
-  validates :price, :stock_quantity, numericality: { :greater_than: 0 }
+  validates :price, :stock_quantity, numericality: { greater_than: 0 }
 end

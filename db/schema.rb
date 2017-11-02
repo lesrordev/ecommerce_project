@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101215659) do
+ActiveRecord::Schema.define(version: 20171102131847) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 20171101215659) do
     t.string "city"
     t.string "country"
     t.string "postal_code"
-    t.integer "customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -61,9 +60,10 @@ ActiveRecord::Schema.define(version: 20171101215659) do
     t.string "number"
     t.string "verification_number"
     t.datetime "due_date"
-    t.integer "customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "customer_id"
+    t.index ["customer_id"], name: "index_cards_on_customer_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -78,8 +78,6 @@ ActiveRecord::Schema.define(version: 20171101215659) do
   create_table "order_items", force: :cascade do |t|
     t.integer "quantity"
     t.decimal "price"
-    t.integer "product_id"
-    t.integer "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -89,15 +87,12 @@ ActiveRecord::Schema.define(version: 20171101215659) do
     t.decimal "pst"
     t.decimal "gst"
     t.decimal "hst"
-    t.integer "customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "product_comments", force: :cascade do |t|
     t.string "content"
-    t.integer "customer_id"
-    t.integer "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
