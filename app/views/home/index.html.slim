@@ -1,0 +1,11 @@
+h1 VINTAGE GAMES Homepage
+h3 Products available:
+
+div class="product_list"
+  - @products.each do |product|
+      div class="product_box"
+        = image_tag product.image
+        h3 = product.name
+        p
+          | Price:
+          = product.price
