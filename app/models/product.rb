@@ -6,4 +6,6 @@ class Product < ApplicationRecord
 
   validates :name, :price, :stock_quantity, presence: true
   validates :price, :stock_quantity, numericality: { greater_than_or_equal_to: 0 }
+
+  max_paginates_per 8
 end
