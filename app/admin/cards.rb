@@ -11,5 +11,6 @@ ActiveAdmin.register Card do
 #   permitted << :other if params[:action] == 'create' && current_user.admin?
 #   permitted
 # end
-
+  permit_params :type, :name, :number, :verification_number, :due_date,
+                :customer_id
 end
