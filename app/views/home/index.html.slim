@@ -4,8 +4,8 @@ h3 Products available:
 div class="product_list"
   - @products.each do |product|
       div class="product_box"
-        = image_tag product.image
-        h3 = product.name
+        = link_to image_tag(product.image), show_product_path(product.id)
+        h3 = link_to "#{product.name}", show_product_path(product.id)
         p
           | Price: $
           = product.price

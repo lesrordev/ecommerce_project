@@ -1,2 +1,18 @@
-h1 Product#show
-p Find me in app/views/product/show.html.slim
+h1 = @product.name
+p = image_tag @product.image
+
+h3 Description:
+p = @product.description
+
+h3 Price:
+p
+  | $
+  = @product.price
+
+h3 Quantity on stock:
+p = @product.stock_quantity
+
+h3 Category:
+p = @product.category.name
+
+= link_to 'Back', root_path
