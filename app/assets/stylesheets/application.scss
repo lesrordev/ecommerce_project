@@ -17,3 +17,17 @@
    margin: auto;
    width: 900px;
  }
+
+header {
+  padding-top: 1em;
+
+  nav ul {
+    list-style-type: square;
+    padding-left: 0;
+
+    li {
+      display: inline-block;
+      padding-right: 1em;
+    }
+  }
+}
