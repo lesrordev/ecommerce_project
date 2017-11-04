@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'product/:id', to: 'product#show', as 'show_product', id: /\d+/
+
   root to: 'home#index'
 
   devise_for :admin_users, ActiveAdmin::Devise.config
