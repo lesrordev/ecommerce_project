@@ -8,4 +8,6 @@ class Product < ApplicationRecord
   validates :price, :stock_quantity, numericality: { greater_than_or_equal_to: 0 }
 
   max_paginates_per 8
+
+  mount_uploader :image, ProductUploader
 end
