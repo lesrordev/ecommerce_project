@@ -1,8 +1,8 @@
 class Customer < ApplicationRecord
-  has_many :orders
-  has_many :cards
-  has_many :addresses
-  has_many :product_comments
+  has_many :orders, dependent: :destroy
+  has_many :cards, dependent: :destroy
+  has_many :addresses, dependent: :destroy
+  has_many :product_comments, dependent: :destroy
 
   validates :name, :email, :password, presence: true
 end

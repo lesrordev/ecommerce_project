@@ -54,7 +54,8 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Project specific gems
-gem 'devise'
 gem 'activeadmin', github: 'activeadmin'
-gem 'slim-rails'
+gem 'devise'
 gem 'kaminari'
+gem 'rubocop'
+gem 'slim-rails'
