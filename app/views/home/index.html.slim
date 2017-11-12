@@ -6,13 +6,13 @@ h5 = paginate @products
 br
 br
 
-div class="card-deck-wrapper"
-  div class="card-deck"
-    - @products.each do |product|
+div class="row"
+  - @products.each do |product|
+    div class="col-3"
+      div class="product_box"
+        = link_to image_tag(product.image, class: 'img-fluid mx-auto d-block'), show_product_path(product.id)
       div
-        = link_to image_tag(product.image, class: 'card-img-top img-fluid mx-auto d-block'), show_product_path(product.id)
         h3 = link_to "#{product.name}", show_product_path(product.id)
-        div class="card-block"
-          p class="card-text"
-            | Price: $
-            = product.price
+        p
+          | Price: $
+          = product.price
