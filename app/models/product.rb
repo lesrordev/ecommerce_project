@@ -12,8 +12,8 @@ class Product < ApplicationRecord
   mount_uploader :image, ProductUploader
 
   def self.search(search)
-    where("name LIKE ?", "%#{search}%")
-    where("description LIKE ?", "%#{search}%")
-    # joins(:categories).where("categories.name LIKE ?", "%#{search}%")
+    where("categories.name LIKE ?", "%#{search}%").
+        or(where("products.name LIKE ?", "%#{search}%")).
+        or(where("description LIKE ?", "%#{search}%"))    
   end
 end
