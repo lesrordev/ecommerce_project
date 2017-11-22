@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'contact', to: 'contact#index', as: 'contact'
   get 'about', to: 'about#index', as: 'about'
   get 'product/:id', to: 'product#show', as: 'show_product'
+  post '/', to: 'home#index', as: 'home'
 
   root to: 'home#index'
 

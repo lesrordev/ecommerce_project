@@ -10,4 +10,10 @@ class Product < ApplicationRecord
   max_paginates_per 8
 
   mount_uploader :image, ProductUploader
+
+  def self.search(search)
+    where("name LIKE ?", "%#{search}%")
+    where("description LIKE ?", "%#{search}%")
+    # joins(:categories).where("categories.name LIKE ?", "%#{search}%")
+  end
 end
