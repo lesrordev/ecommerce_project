@@ -1,7 +1,9 @@
 class HomeController < ApplicationController
   def index
-    if params[:search]
-      @products = Product.joins(:category).search(params[:search]).order(:name).page params[:page]
+    search_param = params[:search]
+
+    if search_param
+      @products = Product.search(search_param).order(:name).page params[:page]
     else
       @products = Product.order(:name).page params[:page]
     end

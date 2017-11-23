@@ -8,11 +8,11 @@ br
 
 div class="row"
   - if @products.blank?
-    h5 Sorry, no products found with the term. 
+    h5 Sorry, no products found with the term.
   - @products.each do |product|
     div class="col-3 product_box"
-      div class="row image_box"
-        div class="col-12"
+      div class="row"
+        div class="col-12 image_box"
           = link_to image_tag(product.image, class: 'img-fluid mx-auto d-block'), show_product_path(product.id)
       div class="row"
         div class="col-12"
