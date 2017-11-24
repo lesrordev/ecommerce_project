@@ -12,13 +12,16 @@
 
 ActiveRecord::Schema.define(version: 20171110231352) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
     t.string "resource_type"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.string "author_type"
-    t.integer "author_id"
+    t.bigint "author_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
@@ -35,7 +38,7 @@ ActiveRecord::Schema.define(version: 20171110231352) do
     t.string "postal_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "province_id"
+    t.bigint "province_id"
     t.index ["province_id"], name: "index_addresses_on_province_id"
   end
 
@@ -64,7 +67,7 @@ ActiveRecord::Schema.define(version: 20171110231352) do
     t.datetime "due_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "customer_id"
+    t.bigint "customer_id"
     t.index ["customer_id"], name: "index_cards_on_customer_id"
   end
 
@@ -88,8 +91,8 @@ ActiveRecord::Schema.define(version: 20171110231352) do
     t.decimal "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "product_id"
-    t.integer "order_id"
+    t.bigint "product_id"
+    t.bigint "order_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
   end
@@ -101,7 +104,7 @@ ActiveRecord::Schema.define(version: 20171110231352) do
     t.decimal "hst"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "customer_id"
+    t.bigint "customer_id"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
   end
 
@@ -116,8 +119,8 @@ ActiveRecord::Schema.define(version: 20171110231352) do
     t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "customer_id"
-    t.integer "product_id"
+    t.bigint "customer_id"
+    t.bigint "product_id"
     t.index ["customer_id"], name: "index_product_comments_on_customer_id"
     t.index ["product_id"], name: "index_product_comments_on_product_id"
   end
@@ -129,7 +132,7 @@ ActiveRecord::Schema.define(version: 20171110231352) do
     t.integer "stock_quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "category_id"
+    t.bigint "category_id"
     t.string "image"
     t.index ["category_id"], name: "index_products_on_category_id"
   end
@@ -144,4 +147,12 @@ ActiveRecord::Schema.define(version: 20171110231352) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "addresses", "provinces"
+  add_foreign_key "cards", "customers"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "customers"
+  add_foreign_key "product_comments", "customers"
+  add_foreign_key "product_comments", "products"
+  add_foreign_key "products", "categories"
 end
