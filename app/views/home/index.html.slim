@@ -3,8 +3,7 @@ h3 Products available:
 
 h5 = paginate @products
 
-br
-br
+= session[:shopping_cart].inspect
 
 div class="row"
   - if @products.blank?
@@ -20,3 +19,4 @@ div class="row"
           p
             | Price: $
             = product.price
+          = link_to '&#x1F6D2; Add to Shopping Cart'.html_safe, add_product_to_cart_home_path(product.id), class: 'btn btn-secondary btn-lg btn-block', role: 'button', method: :post
