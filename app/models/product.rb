@@ -12,7 +12,7 @@ class Product < ApplicationRecord
   mount_uploader :image, ProductUploader
 
   def self.search(search)
-    where('products.name LIKE ?', "%#{search}%")
-      .or(where('description LIKE ?', "%#{search}%"))
+    where('products.name ILIKE ?', "%#{search}%")
+      .or(where('description ILIKE ?', "%#{search}%"))
   end
 end
