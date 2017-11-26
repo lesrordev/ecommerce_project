@@ -17,6 +17,10 @@ Rails.application.routes.draw do
     member do
       post :delete_product_from_cart
     end
+
+    collection do
+      post :update_product_quantity
+    end
   end
 
   devise_for :admin_users, ActiveAdmin::Devise.config

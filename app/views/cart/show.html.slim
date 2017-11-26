@@ -22,7 +22,14 @@ table id="cart" class="table table-hover table-condensed"
         td data-th="Price"
           = "$#{product.price}"
         td data-th="Quantity"
-          = number_field_tag :product, :price, step: 1, min: 0, max: product.stock_quantity, value: 1, class: 'form-control text-center'
+          = form_tag update_product_quantity_cart_index_path, method: 'post', :class => "form-inline my-2 my-lg-0" do
+            = number_field_tag('quantity',
+                  @shopping_cart.find { |e| e['id'] == product.id }['quantity'].to_i,
+                  step: 1, min: 0,
+                  max: product.stock_quantity,
+                  class: 'form-control text-center')
+            = hidden_field_tag 'id', product.id
+            = submit_tag 'Update', class: "btn btn btn-primary my-2 my-sm-0"
         / td data-th="Subtotal" class="text-center" $1.99
         td class="actions" data-th=""
           = link_to '🗑️'.html_safe, delete_product_from_cart_cart_path(product.id), class: 'btn btn-outline-secondary btn-sm', role: 'button', method: :post
