@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  get 'invoice/index'
-
+  get 'invoice', to: 'invoice#index', as: 'invoice_index'
   get 'checkout', to: 'checkout#show', as: 'show_checkout'
   get 'cart', to: 'cart#show', as: 'show_cart'
   get 'contact', to: 'contact#index', as: 'contact'
@@ -25,9 +24,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :checkout do
+  resources :invoice do
     collection do
-      post :save_address
+      post :index
+      get :pay
     end
   end
 
