@@ -1,0 +1,29 @@
+h1 Checkout
+h6 Please, enter your address:
+
+/ div class="row"
+= form_tag save_address_checkout_index_path, method: 'post' do
+  div class="form-group row"
+    = label_tag :address, 'Address', class: 'col-sm-2 col-form-label'
+    div class="col-sm-10"
+      = text_field_tag :address, nil, placeholder: 'Address', class: "form-control"
+
+  div class="form-group row"
+    = label_tag :city, 'City', class: 'col-sm-2 col-form-label'
+    div class="col-sm-10"
+      = text_field_tag :city, nil, placeholder: 'City / Town', class: "form-control"
+
+  div class="form-group row"
+    = label_tag :region, 'Province', class: 'col-sm-2 col-form-label'
+    div class="col-sm-10"
+      = text_field_tag :region, nil, placeholder: 'State / Province / Region', class: "form-control"
+
+  div class="form-group row"
+    = label_tag :postal_code, 'Postal Code', class: 'col-sm-2 col-form-label'
+    div class="col-sm-10"
+      = text_field_tag :postal_code, nil, placeholder: 'Zip / Postal Code', class: "form-control"
+
+  div class="form-group row"
+    = link_to '< Shopping Cart', show_checkout_path, class: 'btn btn-warning col-sm-2'
+    div class='col-sm-2'
+      = submit_tag 'View Order >', class: 'btn btn-success'

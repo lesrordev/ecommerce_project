@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
+  get 'checkout', to: 'checkout#show', as: 'show_checkout'
   get 'cart', to: 'cart#show', as: 'show_cart'
-
   get 'contact', to: 'contact#index', as: 'contact'
   get 'about', to: 'about#index', as: 'about'
   get 'product/:id', to: 'product#show', as: 'show_product'
@@ -20,6 +20,12 @@ Rails.application.routes.draw do
 
     collection do
       post :update_product_quantity
+    end
+  end
+
+  resources :checkout do
+    collection do
+      post :save_address
     end
   end
 
