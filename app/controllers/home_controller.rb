@@ -12,8 +12,8 @@ class HomeController < ApplicationController
   end
 
   def add_product_to_cart
-    id = params[:id].to_i
-    session[:shopping_cart] << id unless session[:shopping_cart].include?(id)
+    product = {id: params[:id].to_i, quantity: 1}
+    session[:shopping_cart] << product unless session[:shopping_cart].include?(product)
     flash[:notice] = 'Successfully added to shopping cart.'
     redirect_back(fallback_location: root_path)
   end
