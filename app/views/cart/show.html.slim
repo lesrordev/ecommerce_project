@@ -1,0 +1,36 @@
+h1 Shopping Cart
+
+= session[:shopping_cart].inspect
+
+table id="cart" class="table table-hover table-condensed"
+  thead
+    tr
+      th style="width:50%" Product
+      th style="width:10%" Price
+      th style="width:8%" Quantity
+      / th style="width:22%" class="text-center" Subtotal
+      th style="width:10%"
+  tbody
+    - @products.each do |product|
+      tr
+        td data-th="Product"
+          div class="row"
+            / div class="col-sm-2 hidden-xs"
+            /   = link_to image_tag(product.image, class: 'img-responsive'), show_product_path(product.id)
+            div class="col-sm-10"
+              h6 = link_to "#{product.name}", show_product_path(product.id), class: 'nomargin'
+        td data-th="Price"
+          = "$#{product.price}"
+        td data-th="Quantity"
+          = number_field_tag :product, :price, step: 1, min: 0, max: product.stock_quantity, value: 1, class: 'form-control text-center'
+        / td data-th="Subtotal" class="text-center" $1.99
+        td class="actions" data-th=""
+          = link_to '🗑️'.html_safe, delete_product_from_cart_cart_path(product.id), class: 'btn btn-outline-secondary btn-sm', role: 'button', method: :post
+  tfoot
+    tr
+      td
+        = link_to '< Continue Shopping', root_path, class: 'btn btn-warning'
+      td class="hidden-xs"
+      td class="hidden-xs text-center font-weight-bold"
+      td
+        = link_to 'Checkout >', '#', class: 'btn btn-success btn-block'

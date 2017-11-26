@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'cart', to: 'cart#show', as: 'show_cart'
+
   get 'contact', to: 'contact#index', as: 'contact'
   get 'about', to: 'about#index', as: 'about'
   get 'product/:id', to: 'product#show', as: 'show_product'
@@ -8,6 +10,12 @@ Rails.application.routes.draw do
   resources :home do
     member do
       post :add_product_to_cart
+    end
+  end
+
+  resources :cart do
+    member do
+      post :delete_product_from_cart
     end
   end
 
