@@ -2,9 +2,11 @@ class InvoiceController < ApplicationController
   before_action :initialize_session
 
   def index
+    @products = Array.new
+
     if params[:address] == nil || params[:address] == ""
       flash[:notice] = "Test."
-      redirect_back(fallback_location: root_path)
+      # redirect_back(fallback_location: root_path)
     else
       session[:address] = { address: params[:address],
                             city: params[:city],

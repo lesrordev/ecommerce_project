@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   resources :invoice do
     collection do
       post :index
-      get :pay
+      post :pay
     end
   end
 

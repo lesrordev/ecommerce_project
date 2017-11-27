@@ -34,4 +34,4 @@ table id="invoice" class="table table-hover table-condensed"
         = "Total: #{@total}"
       td class="hidden-xs"
       td
-        = link_to 'Pay >', pay_invoice_index_path, class: 'btn btn-success btn-block'
+        = link_to 'Pay >', pay_invoice_index_path, class: 'btn btn-success btn-block', method: 'post'
