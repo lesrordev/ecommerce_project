@@ -5,8 +5,8 @@ class InvoiceController < ApplicationController
     @products = Array.new
 
     if params[:address] == nil || params[:address] == ""
-      flash[:notice] = "Test."
-      # redirect_back(fallback_location: root_path)
+      flash[:notice] = "Error in the address."
+      redirect_to show_checkout_path
     else
       session[:address] = { address: params[:address],
                             city: params[:city],
@@ -55,7 +55,7 @@ class InvoiceController < ApplicationController
     session.delete(:shopping_cart)
 
     flash[:notice] = "Order registered."
-    redirect_back(fallback_location: root_path)
+    redirect_to root_path
   end
 
   # Format a number as currency
