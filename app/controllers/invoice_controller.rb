@@ -69,7 +69,7 @@ class InvoiceController < ApplicationController
                           product_id: product_id, order_id: order_id)
       end
 
-      # Save stripe customer id
+      # TO DO: Save stripe customer id
       stripe_customer_id = @customer.id
 
       # Clean shopping_cart session
