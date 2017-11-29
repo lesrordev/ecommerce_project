@@ -3,7 +3,7 @@ h3 Products available:
 
 h5 = paginate @products
 
-= session[:shopping_cart].inspect
+/ = session[:shopping_cart].inspect
 
 div class="row"
   - if @products.blank?

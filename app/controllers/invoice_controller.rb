@@ -4,8 +4,8 @@ class InvoiceController < ApplicationController
   def index
     @products = Array.new
 
-    if params[:address] == nil || params[:address] == ""
-      flash[:notice] = "Error in the address."
+    if (params[:address] == nil || params[:address] == "" || params[:city] == nil || params[:city] == "" || params[:postal_code] == nil || params[:postal_code] == "")
+      flash[:error] = "Error in the address."
       redirect_to show_checkout_path
     else
       session[:address] = { address: params[:address],
@@ -29,33 +29,62 @@ class InvoiceController < ApplicationController
       gst = subtotal * province.gst
       hst = subtotal * province.hst
 
-      @total = currency(subtotal + pst + gst + hst)
+      @total = subtotal + pst + gst + hst
+
+      @description = 'Enter your card information'
     end
   end
 
   def pay
-    province = Province.find(session[:address]['region'].to_i)
+    amount = params[:total].to_f * 100
+    amount = amount.to_i
 
-    # Store order in database
-    Order.create(status: 'new', pst: province.pst, gst: province.gst,
-                  hst: province.hst, customer_id: 1)
+    @customer = Stripe::Customer.create(
+      email: params[:stripeEmail],
+      source: params[:stripeToken]
+    )
 
-    order_id = Order.last.id
+    @charge = Stripe::Charge.create(
+      customer: @customer.id,
+      amount: amount,
+      description: 'Rails Stripe customer',
+      currency: 'cad'
+    )
 
-    session[:shopping_cart].each do |item|
-      product_id = item['id'].to_i
-      quantity = item['quantity'].to_i
-      product = Product.find(product_id)
+    if @charge.paid && @charge.amount == amount
+      province = Province.find(session[:address]['region'].to_i)
 
-      OrderItem.create(quantity: quantity, price: product.price,
-                        product_id: product_id, order_id: order_id)
+      # Store order in database
+      Order.create(status: 'paid', pst: province.pst, gst: province.gst,
+                    hst: province.hst, customer_id: 1)
+
+      order_id = Order.last.id
+
+      session[:shopping_cart].each do |item|
+        product_id = item['id'].to_i
+        quantity = item['quantity'].to_i
+        product = Product.find(product_id)
+
+        OrderItem.create(quantity: quantity, price: product.price,
+                          product_id: product_id, order_id: order_id)
+      end
+
+      # Save stripe customer id
+      stripe_customer_id = @customer.id
+
+      # Clean shopping_cart session
+      session.delete(:shopping_cart)
+
+      flash[:notice] = "Order payment completed."
+    else
+      flash[:error] = "Payment not completed."
     end
 
-    # Clean shopping_cart session
-    session.delete(:shopping_cart)
-
-    flash[:notice] = "Order registered."
     redirect_to root_path
+
+  rescue Stripe::CardError => e
+    flash[:error] = e.message
+    redirect_to invoice_index_path
   end
 
   # Format a number as currency
@@ -68,4 +97,5 @@ class InvoiceController < ApplicationController
     session[:shopping_cart] ||= []
     session[:address] ||= []
   end
+
 end
