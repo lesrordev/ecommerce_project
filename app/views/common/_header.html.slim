@@ -10,4 +10,5 @@ nav class="navbar navbar-expand-md navbar-light bg-faded"
       li class="nav-item" = link_to '&#x1F6D2;'.html_safe, show_cart_path, class: 'nav-link'
     = form_tag root_path, method: 'get', :class => "form-inline my-2 my-lg-0" do
       = text_field_tag :search, params[:search], placeholder: 'Search products', class: "form-control mr-sm-2"
+      = collection_select(nil, :category, Category.all, :id, :name, {include_blank: 'All Categories'}, {class: 'form-control mr-sm-2'})
       = submit_tag 'Search', class: "btn btn-outline-success my-2 my-sm-0"

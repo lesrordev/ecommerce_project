@@ -15,8 +15,9 @@ div class="row"
           = link_to image_tag(product.image, class: 'img-fluid mx-auto d-block'), show_product_path(product.id)
       div class="row"
         div class="col-12"
-          h3 = link_to "#{product.name}", show_product_path(product.id)
-          p
-            | Price: $
-            = product.price
-          = link_to '&#x1F6D2; Add to Shopping Cart'.html_safe, add_product_to_cart_home_path(product.id), class: 'btn btn-secondary btn-lg btn-block', role: 'button', method: :post
+          h5 = link_to "#{product.name}", show_product_path(product.id)
+          p class='font-weight-normal'
+            = "Category: #{product.category.name}"
+          p class='font-weight-bold'
+            = "Price: #{number_to_currency(product.price)}"
+          div = link_to '&#x1F6D2; Add to Shopping Cart'.html_safe, add_product_to_cart_home_path(product.id), class: 'btn btn-secondary btn-lg btn-block', role: 'button', method: :post
