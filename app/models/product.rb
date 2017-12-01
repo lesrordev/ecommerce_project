@@ -11,8 +11,9 @@ class Product < ApplicationRecord
 
   mount_uploader :image, ProductUploader
 
-  def self.search(search)
-    where('products.name ILIKE ?', "%#{search}%")
-      .or(where('description ILIKE ?', "%#{search}%"))
+  def self.search(search, category)
+    query = "(name ILIKE '%#{search}%' OR description ILIKE '%#{search}%')"
+    query += " AND category_id = #{category}" if category > 0
+    where(query)
   end
 end
