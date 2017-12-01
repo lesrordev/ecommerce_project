@@ -3,9 +3,14 @@ class HomeController < ApplicationController
 
   def index
     search_param = params[:search]
+    category_param = params[:category].to_i
 
     if search_param
-      @products = Product.search(search_param).order(:name).page params[:page]
+      if category_param > 0
+        @products = Product.where(category_id: category_param).search(search_param).order(:name).page params[:page]
+      else
+        @products = Product.search(search_param).order(:name).page params[:page]
+      end
     else
       @products = Product.order(:name).page params[:page]
     end

@@ -5,9 +5,7 @@ h3 Description:
 p = @product.description
 
 h3 Price:
-p
-  | $
-  = @product.price
+p = number_to_currency(@product.price)
 
 h3 Quantity on stock:
 p = @product.stock_quantity
