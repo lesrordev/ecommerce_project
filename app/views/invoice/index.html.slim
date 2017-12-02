@@ -11,7 +11,8 @@ table id="invoice" class="table table-hover table-condensed"
       th style="width:8%" Quantity
       th style="width:10%" Subtotal
   tbody
-    - @products.each do |product|
+    - @shopping_cart.each do |cart|
+      - product = Product.find(cart['id'].to_i)
       tr
         td data-th="Product"
           div class="row"
@@ -20,18 +21,18 @@ table id="invoice" class="table table-hover table-condensed"
             div class="col-sm-10"
               h6 = link_to "#{product.name}", show_product_path(product.id), class: 'nomargin'
         td data-th="Price"
-          = currency(product.price)
+          = number_to_currency(product.price)
         td data-th="Quantity"
           div class='text-center'
-            = @shopping_cart.find { |e| e['id'] == product.id }['quantity'].to_i
+            = cart['quantity'].to_i
         td data-th='Subtotal'
-          = currency(product.price * @shopping_cart.find { |e| e['id'] == product.id }['quantity'].to_i)
+          = number_to_currency(product.price * cart['quantity'].to_i)
   tfoot
     tr
       td
         = link_to '< Continue Shopping', root_path, class: 'btn btn-warning'
       td class="hidden-xs font-weight-bold"
-        = "Total: #{currency(@total)}"
+        = "Total: #{number_to_currency(@total)}"
       td class="hidden-xs"
       td
         / = link_to 'Pay >', pay_invoice_index_path, class: 'btn btn-success btn-block', method: 'post'

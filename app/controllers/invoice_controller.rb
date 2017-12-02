@@ -2,37 +2,11 @@ class InvoiceController < ApplicationController
   before_action :initialize_session
 
   def index
-    @products = Array.new
-
-    if (params[:address] == nil || params[:address] == "" || params[:city] == nil || params[:city] == "" || params[:postal_code] == nil || params[:postal_code] == "")
-      flash[:error] = "Error in the address."
-      redirect_to show_checkout_path
-    else
-      session[:address] = { address: params[:address],
-                            city: params[:city],
-                            region: params[:region],
-                            postal_code: params[:postal_code] }
-
-      product_ids = Array.new
-      session[:shopping_cart].each { |e| product_ids << e['id'].to_i }
-      @products = Product.find(product_ids)
-      @shopping_cart = session[:shopping_cart]
-
-      subtotal = 0
-      @products.each do |product|
-        quantity = @shopping_cart.find { |cart| product.id == cart['id'] }['quantity'].to_i
-        subtotal += quantity * product.price
-      end
-
-      province = Province.find(params[:region].to_i)
-      pst = subtotal * province.pst
-      gst = subtotal * province.gst
-      hst = subtotal * province.hst
-
-      @total = subtotal + pst + gst + hst
-
-      @description = 'Enter your card information'
-    end
+    check_address_inputs
+    @shopping_cart = session[:shopping_cart]
+    @total = calculate_total_before_taxes(@shopping_cart)
+    @total = calculate_total_after_taxes(@total, params[:region])
+    @description = 'Enter your card information'
   end
 
   def pay
@@ -56,7 +30,7 @@ class InvoiceController < ApplicationController
 
       # Store order in database
       Order.create(status: 'paid', pst: province.pst, gst: province.gst,
-                    hst: province.hst, customer_id: 1)
+                   hst: province.hst, customer_id: 1)
 
       order_id = Order.last.id
 
@@ -66,36 +40,56 @@ class InvoiceController < ApplicationController
         product = Product.find(product_id)
 
         OrderItem.create(quantity: quantity, price: product.price,
-                          product_id: product_id, order_id: order_id)
+                         product_id: product_id, order_id: order_id)
       end
 
       # TO DO: Save stripe customer id
-      stripe_customer_id = @customer.id
+      # stripe_customer_id = @customer.id
 
       # Clean shopping_cart session
       session.delete(:shopping_cart)
 
-      flash[:notice] = "Order payment completed."
+      flash[:notice] = 'Order payment completed.'
     else
-      flash[:error] = "Payment not completed."
+      flash[:notice] = 'Payment not completed.'
     end
 
     redirect_to root_path
-
   rescue Stripe::CardError => e
-    flash[:error] = e.message
+    flash[:notice] = e.message
     redirect_to invoice_index_path
   end
-
-  # Format a number as currency
-  def currency(amount)
-    format('$%.2f', amount)
-  end
-  helper_method :currency
 
   def initialize_session
     session[:shopping_cart] ||= []
     session[:address] ||= []
   end
 
+  def check_address_inputs
+    return unless params[:address].blank? || params[:city].blank? || params[:postal_code].blank?
+    flash[:notice] = 'Error in the address.'
+    redirect_to show_checkout_path
+  end
+
+  def create_address_session
+    session[:address] = { address: params[:address],
+                          city: params[:city],
+                          region: params[:region],
+                          postal_code: params[:postal_code] }
+  end
+
+  def calculate_total_before_taxes(shopping_cart)
+    total = 0
+
+    shopping_cart.each do |cart|
+      total += cart['quantity'].to_i * Product.find(cart['id']).price
+    end
+
+    total
+  end
+
+  def calculate_total_after_taxes(total, selected_province)
+    province = Province.find(selected_province.to_i)
+    total * (1 + province.pst + province.gst + province.hst)
+  end
 end
