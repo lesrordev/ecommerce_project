@@ -10,49 +10,12 @@ class InvoiceController < ApplicationController
   end
 
   def pay
-    amount = params[:total].to_f * 100
-    amount = amount.to_i
+    amount = params[:total].to_i
 
-    @customer = Stripe::Customer.create(
-      email: params[:stripeEmail],
-      source: params[:stripeToken]
-    )
+    @customer = create_stripe_customer
+    @charge = create_stripe_charge(amount)
 
-    @charge = Stripe::Charge.create(
-      customer: @customer.id,
-      amount: amount,
-      description: 'Rails Stripe customer',
-      currency: 'cad'
-    )
-
-    if @charge.paid && @charge.amount == amount
-      province = Province.find(session[:address]['region'].to_i)
-
-      # Store order in database
-      Order.create(status: 'paid', pst: province.pst, gst: province.gst,
-                   hst: province.hst, customer_id: 1)
-
-      order_id = Order.last.id
-
-      session[:shopping_cart].each do |item|
-        product_id = item['id'].to_i
-        quantity = item['quantity'].to_i
-        product = Product.find(product_id)
-
-        OrderItem.create(quantity: quantity, price: product.price,
-                         product_id: product_id, order_id: order_id)
-      end
-
-      # TO DO: Save stripe customer id
-      # stripe_customer_id = @customer.id
-
-      # Clean shopping_cart session
-      session.delete(:shopping_cart)
-
-      flash[:notice] = 'Order payment completed.'
-    else
-      flash[:notice] = 'Payment not completed.'
-    end
+    verify_payment(@charge, amount)
 
     redirect_to root_path
   rescue Stripe::CardError => e
@@ -66,7 +29,8 @@ class InvoiceController < ApplicationController
   end
 
   def check_address_inputs
-    return unless params[:address].blank? || params[:city].blank? || params[:postal_code].blank?
+    return unless params[:address].blank? || params[:city].blank? ||
+                  params[:postal_code].blank?
     flash[:notice] = 'Error in the address.'
     redirect_to show_checkout_path
   end
@@ -91,5 +55,58 @@ class InvoiceController < ApplicationController
   def calculate_total_after_taxes(total, selected_province)
     province = Province.find(selected_province.to_i)
     total * (1 + province.pst + province.gst + province.hst)
+  end
+
+  def create_stripe_customer
+    Stripe::Customer.create(
+      email: params[:stripeEmail],
+      source: params[:stripeToken]
+    )
+  end
+
+  def create_stripe_charge(amount)
+    Stripe::Charge.create(
+      customer: @customer.id,
+      amount: amount,
+      description: 'Rails Stripe customer',
+      currency: 'cad'
+    )
+  end
+
+  def verify_payment(charge, amount)
+    message = 'Payment not completed.'
+
+    if charge.paid && charge.amount == amount
+      save_order
+
+      # TO DO: Save stripe customer id
+      # stripe_customer_id = @customer.id
+
+      # Clean shopping_cart session
+      session.delete(:shopping_cart)
+
+      message = 'Order payment completed.'
+    end
+
+    flash[:notice] = message
+  end
+
+  def save_order
+    province = Province.find(session[:address]['region'].to_i)
+
+    # Store order in database
+    Order.create(status: 'paid', pst: province.pst, gst: province.gst,
+                 hst: province.hst, customer_id: 1)
+
+    save_order_items(Order.last.id)
+  end
+
+  def save_order_items(order_id)
+    session[:shopping_cart].each do |cart|
+      product = Product.find(cart['id'].to_i)
+
+      OrderItem.create(quantity: cart['quantity'].to_i, price: product.price,
+                       product_id: product.id, order_id: order_id)
+    end
   end
 end
