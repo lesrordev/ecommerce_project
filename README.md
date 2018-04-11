@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+E-commerce site project developed with Ruby on Rails
 
-Things you may want to cover:
+Deployed to https://vintagegames.herokuapp.com/
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Resources used:
+- Bootstrap
+- SCSS
+- Activeadmin
+- Carrierwave
+- Postgresql
+- Rubocop
+- Slim-rails
+- Stripe
